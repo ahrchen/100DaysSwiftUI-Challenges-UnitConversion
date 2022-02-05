@@ -25,10 +25,10 @@ struct ContentView: View {
     @State private var toUnit: Dimension = UnitLength.feet
     @State private var convertNumber: Double = 0.0
     
-    private var toNumber: Measurement<Dimension> {
+    private var toNumber: String {
         let inputValue = Measurement(value: convertNumber, unit: convertUnit)
         let outputValue = inputValue.converted(to: toUnit)
-        return outputValue
+        return formatter.string(from: outputValue)
     }
     
     let units: [AvailableUnits : [Dimension]] = [
@@ -60,6 +60,8 @@ struct ContentView: View {
                     .pickerStyle(.segmented)
                 }
                 Section {
+                    TextField("Input", value: $convertNumber, format: .number)
+                        .keyboardType(.decimalPad)
                     Picker("Convert Unit", selection: $convertUnit){
                         ForEach(units[unitSelection]!, id: \.self) { unit in
                             Text(formatter.string(from: unit))
@@ -68,6 +70,7 @@ struct ContentView: View {
                     .pickerStyle(.segmented)
                 }
                 Section {
+                    Text(toNumber)
                     Picker("To Unit", selection: $toUnit){
                         ForEach(units[unitSelection]!, id: \.self) { unit in
                             Text(formatter.string(from: unit))
@@ -78,6 +81,11 @@ struct ContentView: View {
                 
             }
             .navigationTitle("Unit Conversion")
+            .onChange(of: unitSelection) { newValue in
+                let unit = units[unitSelection]!
+                convertUnit = unit[0]
+                toUnit = unit[1]
+            }
         }
         
     }
