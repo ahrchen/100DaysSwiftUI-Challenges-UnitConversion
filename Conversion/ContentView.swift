@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     
-    enum Units: String, Comparable {
+    enum AvailableUnits: String, Comparable {
         case length
         case temp
         case time
@@ -20,7 +20,7 @@ struct ContentView: View {
           }
     }
     
-    @State private var unitSelection: [Unit] = []
+    @State private var unitSelection: AvailableUnits = .length
     @State private var convertUnit: Dimension = UnitLength.meters
     @State private var toUnit: Dimension = UnitLength.feet
     @State private var convertNumber: Double = 0.0
@@ -31,7 +31,7 @@ struct ContentView: View {
         return outputValue
     }
     
-    let units: [Units : [Unit]] = [
+    let units: [AvailableUnits : [Dimension]] = [
         .length : [UnitLength.meters, UnitLength.kilometers, UnitLength.feet, UnitLength.yards, UnitLength.miles],
         .temp : [UnitTemperature.celsius, UnitTemperature.fahrenheit, UnitTemperature.kelvin],
         .volume : [UnitVolume.liters, UnitVolume.milliliters, UnitVolume.cups, UnitVolume.pints, UnitVolume.gallons],
@@ -59,6 +59,23 @@ struct ContentView: View {
                     }
                     .pickerStyle(.segmented)
                 }
+                Section {
+                    Picker("Convert Unit", selection: $convertUnit){
+                        ForEach(units[unitSelection]!, id: \.self) { unit in
+                            Text(formatter.string(from: unit))
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                }
+                Section {
+                    Picker("To Unit", selection: $toUnit){
+                        ForEach(units[unitSelection]!, id: \.self) { unit in
+                            Text(formatter.string(from: unit))
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                }
+                
             }
             .navigationTitle("Unit Conversion")
         }
