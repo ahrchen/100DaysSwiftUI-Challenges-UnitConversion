@@ -24,6 +24,7 @@ struct ContentView: View {
     @State private var convertUnit: Dimension = UnitLength.meters
     @State private var toUnit: Dimension = UnitLength.feet
     @State private var convertNumber: Double = 0.0
+    @FocusState private var convertUnitIsFocused: Bool
     
     private var toNumber: String {
         let inputValue = Measurement(value: convertNumber, unit: convertUnit)
@@ -62,6 +63,7 @@ struct ContentView: View {
                 Section {
                     TextField("Input", value: $convertNumber, format: .number)
                         .keyboardType(.decimalPad)
+                        .focused($convertUnitIsFocused)
                     Picker("Convert Unit", selection: $convertUnit){
                         ForEach(units[unitSelection]!, id: \.self) { unit in
                             Text(formatter.string(from: unit))
@@ -85,6 +87,15 @@ struct ContentView: View {
                 let unit = units[unitSelection]!
                 convertUnit = unit[0]
                 toUnit = unit[1]
+            }
+            .toolbar {
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    
+                    Button("Done") {
+                        convertUnitIsFocused = false
+                    }
+                }
             }
         }
         
