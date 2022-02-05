@@ -108,25 +108,6 @@ struct ContentView_Previews: PreviewProvider {
     }
 }
 
-
-extension UnitLength {
-    var localizedName: String {
-        if self == UnitLength.meters {
-            return "Meter"
-        } else if self == UnitLength.kilometers {
-            return "Kilometer"
-        } else if self == UnitLength.feet {
-            return "Feet"
-        } else if self == UnitLength.yards {
-            return "Yards"
-        } else if self == UnitLength.miles {
-            return "Miles"
-        } else {
-            return "Unknown"
-        }
-    }
-}
-
 extension UnitDuration {
     static let SecondsPerDay: Double = 86_400
     
